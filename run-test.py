@@ -3,7 +3,7 @@ Ponto de entrada da aplicação.
 """
 import pandas as pd
 import msc_tester.app, msc_tester.reporter
-from msc_tester.test import test1
+from msc_tester.test import test1, test2
 import logging as logger
 
 logger.basicConfig(format='%(asctime)s\t%(levelname)s\t%(message)s', level=logger.DEBUG, datefmt='%Y-%m-%d %H:%M:%S')
@@ -18,6 +18,7 @@ msc_anterior = pd.read_pickle(r'C:\Users\Everton\Desktop\Prefeitura\MSC\v2\pickl
 
 testes = [
     test1,
+    test2,
 ]
 
 app = msc_tester.app.App(logger, reporter, mapeamento, msc_atual, msc_anterior, testes)
