@@ -7,7 +7,7 @@ import pandas as pd
 
 
 class App:
-    def __init__(self, logger, reporter, mapeamento_cc, msc_atual, msc_anterior, balver_atual, balver_anterior, testes):
+    def __init__(self, logger, reporter, mapeamento_cc, msc_atual, msc_anterior, balver_atual, balver_anterior, balrec, testes):
         self.logger = logger
         self.reporter = reporter
         self.mapeamento_cc = mapeamento_cc
@@ -15,6 +15,7 @@ class App:
         self.msc_atual = msc_atual
         self.balver_atual = balver_atual
         self.balver_anterior = balver_anterior
+        self.balrec = balrec
         self.testes = testes
 
 
