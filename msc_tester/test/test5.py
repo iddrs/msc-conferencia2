@@ -16,9 +16,11 @@ class Test:
     def run(self):
         self.app.logger.debug('Preparando MSC...')
         msc = self.prepare_msc(self.app.msc_atual)
+        self.app.logger.debug('Preparando BAL_VER...')
+        balver = self.prepare_balver(self.app.balver)
 
         self.app.logger.debug('Realizando o teste...')
-        result = self.run_test(msc, self.app.balver)
+        result = self.run_test(msc, balver)
         self.app.logger.debug('Devolvendo o resultado...')
         return result
 
@@ -87,6 +89,72 @@ class Test:
                 progressbar.update(1)
         df = pd.DataFrame(result)
         df = df.loc[df['diff']]
+        return df
+
+    def prepare_balver(self, balver):
+        balver = balver.copy()
+        balver['saldo_inicial_valor_pad'] = balver['saldo_inicial_valor_pad'].fillna(0.0)
+        balver['saldo_inicial_natureza_pad'] = balver['saldo_inicial_natureza_pad'].fillna(' ')
+        balver['saldo_final_valor_pad'] = balver['saldo_final_valor_pad'].fillna(0.0)
+        balver['saldo_final_natureza_pad'] = balver['saldo_final_natureza_pad'].fillna(' ')
+        balver['movimento_devedor_pad'] = balver['movimento_devedor_pad'].fillna(0.0)
+        balver['movimento_credor_pad'] = balver['movimento_credor_pad'].fillna(0.0)
+        lista_cc = balver['conta_contabil'].unique()
+        balancete = []
+
+        for cc in lista_cc:
+            saldo_inicial_devedor = round(sum(balver.loc[
+                                                  (balver['conta_contabil'] == cc)
+                & (balver['saldo_inicial_natureza_pad'] == 'D')
+                                              ]['saldo_inicial_valor_pad']), 2)
+            saldo_inicial_credor = round(sum(balver.loc[
+                                                  (balver['conta_contabil'] == cc)
+                                                  & (balver['saldo_inicial_natureza_pad'] == 'C')
+                                                  ]['saldo_inicial_valor_pad']), 2)
+            if saldo_inicial_devedor > saldo_inicial_credor:
+                saldo_inicial_valor = saldo_inicial_devedor - saldo_inicial_credor
+                saldo_inicial_natureza = 'D'
+            elif saldo_inicial_credor > saldo_inicial_devedor:
+                saldo_inicial_valor = saldo_inicial_credor - saldo_inicial_devedor
+                saldo_inicial_natureza = 'C'
+            else:
+                saldo_inicial_valor = 0.0
+                saldo_inicial_natureza = ' '
+
+            saldo_final_devedor = round(sum(balver.loc[
+                                                  (balver['conta_contabil'] == cc)
+                                                  & (balver['saldo_final_natureza_pad'] == 'D')
+                                                  ]['saldo_final_valor_pad']), 2)
+            saldo_final_credor = round(sum(balver.loc[
+                                                 (balver['conta_contabil'] == cc)
+                                                 & (balver['saldo_final_natureza_pad'] == 'C')
+                                                 ]['saldo_final_valor_pad']), 2)
+            if saldo_final_devedor > saldo_final_credor:
+                saldo_final_valor = saldo_final_devedor - saldo_final_credor
+                saldo_final_natureza = 'D'
+            elif saldo_final_credor > saldo_final_devedor:
+                saldo_final_valor = saldo_final_credor - saldo_final_devedor
+                saldo_final_natureza = 'C'
+            else:
+                saldo_final_valor = 0.0
+                saldo_final_natureza = ' '
+
+            movimento_devedor = round(sum(balver[balver['conta_contabil'] == cc]['movimento_devedor_pad']), 2)
+            movimento_credor = round(sum(balver[balver['conta_contabil'] == cc]['movimento_credor_pad']), 2)
+
+            balancete.append({
+                'conta_contabil': cc,
+                'saldo_inicial_valor_pad': saldo_inicial_valor,
+                'saldo_inicial_natureza_pad': saldo_inicial_natureza,
+                'movimento_devedor_pad': movimento_devedor,
+                'movimento_credor_pad': movimento_credor,
+                'saldo_final_valor_pad': saldo_final_valor,
+                'saldo_final_natureza_pad': saldo_final_natureza
+            })
+            df = pd.DataFrame.from_dict(balancete)
+            df['saldo_inicial_chave_pad'] = round(df['saldo_inicial_valor_pad'], 2).astype(str) + df.saldo_inicial_natureza_pad
+            df['saldo_final_chave_pad'] = round(df['saldo_final_valor_pad'], 2).astype(str) + df.saldo_final_natureza_pad
+        
         return df
 
     def prepare_msc(self, msc):

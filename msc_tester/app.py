@@ -7,7 +7,7 @@ import pandas as pd
 
 
 class App:
-    def __init__(self, logger, reporter, mapeamento_cc, msc_atual, msc_anterior, balver_atual, balver_anterior, balrec, baldesp, decreto, testes):
+    def __init__(self, logger, reporter, mapeamento_cc, msc_atual, msc_anterior, balver_atual, balver_anterior, balrec, baldesp, decreto, restos_pagar, testes):
         self.logger = logger
         self.reporter = reporter
         self.mapeamento_cc = mapeamento_cc
@@ -18,6 +18,7 @@ class App:
         self.balrec = balrec
         self.baldesp = baldesp
         self.decreto = decreto
+        self.restos_pagar = restos_pagar
         self.testes = testes
 
 
@@ -57,7 +58,7 @@ class App:
                 saldo_inicial = 0.0
                 natureza_inicial = ' '
 
-            # movimentação a débito
+            # movimentação a débito/crédito
             movimento_devedor_anterior = sum(balver_anterior[balver_anterior['conta_contabil'] == cc]['movimento_devedor'])
             movimento_credor_anterior = sum(balver_anterior[balver_anterior['conta_contabil'] == cc]['movimento_credor'])
             movimento_devedor_atual = sum(balver_atual[balver_atual['conta_contabil'] == cc]['movimento_devedor'])
@@ -101,7 +102,6 @@ class App:
        'saldo_final_valor_pad']
         df['saldo_inicial_chave_pad'] = df['saldo_inicial_valor_pad'].astype(str) + df.saldo_inicial_natureza_pad
         df['saldo_final_chave_pad'] = df['saldo_final_valor_pad'].astype(str) + df.saldo_final_natureza_pad
-
         return df
 
     def busca_mapeamento(self, list_cc):
