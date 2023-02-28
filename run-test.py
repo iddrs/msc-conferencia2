@@ -17,15 +17,22 @@ else:
 
 mes_anterior = str(int(mes) - 1).zfill(2)
 if mes_anterior == '00':
-    mes_anterior = '12'
+    mes_anterior_msc = '13'
+    mes_anterior_pad = '12'
+else:
+    mes_anterior_msc = '12'
+    mes_anterior_pad = '12'
 
 logger.basicConfig(format='%(asctime)s\t%(levelname)s\t%(message)s', level=logger.DEBUG, datefmt='%Y-%m-%d %H:%M:%S')
 file_report = r'report.xlsx'
 file_mapeamento_cc = r'mapeamento_cc.xlsx'
 file_msc_atual = os.path.join(r'C:\Users\Everton\Desktop\Prefeitura\MSC\parquet', f'{ano}-{mes}.parquet')
-file_msc_anterior = os.path.join(r'C:\Users\Everton\Desktop\Prefeitura\MSC\parquet', f'{ano_anterior}-{mes_anterior}.parquet')
+file_msc_anterior = os.path.join(r'C:\Users\Everton\Desktop\Prefeitura\MSC\parquet', f'{ano_anterior}-{mes_anterior_msc}.parquet')
 file_balver_atual = os.path.join(r'C:\Users\Everton\Desktop\Prefeitura\PAD', f'{ano}-{mes}', r'parquet\BAL_VER.parquet')
-file_balver_anterior = os.path.join(r'C:\Users\Everton\Desktop\Prefeitura\PAD', f'{ano_anterior}-{mes_anterior}', r'parquet\BAL_VER.parquet')
+if mes_anterior_msc == '13':
+    file_balver_anterior = os.path.join(r'C:\Users\Everton\Desktop\Prefeitura\PAD', f'{ano_anterior}-{mes_anterior_pad}', r'parquet\BVER_ENC.parquet')
+else:
+    file_balver_anterior = os.path.join(r'C:\Users\Everton\Desktop\Prefeitura\PAD', f'{ano_anterior}-{mes_anterior_pad}', r'parquet\BAL_VER.parquet')
 file_balrec = os.path.join(r'C:\Users\Everton\Desktop\Prefeitura\PAD', f'{ano}-{mes}', r'parquet\BAL_REC.parquet')
 file_baldesp = os.path.join(r'C:\Users\Everton\Desktop\Prefeitura\PAD', f'{ano}-{mes}', r'parquet\BAL_DESP.parquet')
 file_decreto = os.path.join(r'C:\Users\Everton\Desktop\Prefeitura\PAD', f'{ano}-{mes}', r'parquet\DECRETO.parquet')
@@ -65,5 +72,5 @@ testes = [
     test9,
 ]
 
-app = msc_tester.app.App(logger, reporter, mapeamento_cc, msc_atual, msc_anterior, balver_atual, balver_anterior, balrec, baldesp, decreto, restos_pagar, testes)
+app = msc_tester.app.App(logger, reporter, mapeamento_cc, msc_atual, msc_anterior, balver_atual, balver_anterior, balrec, baldesp, decreto, restos_pagar, testes, mes)
 app.run()

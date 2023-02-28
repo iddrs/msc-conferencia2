@@ -139,7 +139,7 @@ class Test:
         saldo_msc = saldo_msc_c - saldo_msc_d
 
         saldo_balrec = round(sum(balrec[
-                                     (balrec['recurso_vinculado'] == 31)
+                                     ((balrec['fonte_recurso'] >= 540) & (balrec['fonte_recurso'] <= 543))
                                      & (balrec['caracteristica_peculiar_receita'] > 0)
                                  ]['receita_orcada'])*-1, 2)
         diff = round(saldo_msc - saldo_balrec, 2)
@@ -169,7 +169,7 @@ class Test:
         saldo_msc = saldo_msc_c - saldo_msc_d
 
         saldo_balrec = round(sum(balrec[
-                                     (balrec['recurso_vinculado'] > 0)
+                                     (balrec['fonte_recurso'] > 0)
                                      & (balrec['caracteristica_peculiar_receita'] > 0)
                                      & (
                                              (balrec['caracteristica_peculiar_receita'] == 101)
@@ -203,7 +203,7 @@ class Test:
         saldo_msc = saldo_msc_c - saldo_msc_d
 
         saldo_balrec = round(sum(balrec[
-                                     (balrec['recurso_vinculado'] > 0)
+                                     (balrec['fonte_recurso'] > 0)
                                      & (balrec['caracteristica_peculiar_receita'] > 0)
                                      & (
                                          (balrec['caracteristica_peculiar_receita'] != 101)
@@ -268,7 +268,7 @@ class Test:
         saldo_msc = saldo_msc_c - saldo_msc_d
 
         saldo_balrec = round(sum(balrec[
-                                     (balrec['recurso_vinculado'] ==31)
+                                     ((balrec['fonte_recurso'] >= 540) & (balrec['fonte_recurso'] <= 543))
                                      & (balrec['caracteristica_peculiar_receita'] == 105)
                                  ]['valor_atualizacao'])*-1, 2)
         diff = round(saldo_msc - saldo_balrec, 2)
@@ -298,7 +298,7 @@ class Test:
         saldo_msc = saldo_msc_c - saldo_msc_d
 
         saldo_balrec = round(sum(balrec[
-                                     (balrec['recurso_vinculado'] > 0)
+                                     (balrec['fonte_recurso'] > 0)
                                      & (
                                          (balrec['caracteristica_peculiar_receita'] == 101)
                                          | (balrec['caracteristica_peculiar_receita'] == 103)
@@ -332,7 +332,7 @@ class Test:
         saldo_msc = saldo_msc_c - saldo_msc_d
 
         saldo_balrec = round(sum(balrec[
-                                     (balrec['recurso_vinculado'] > 0)
+                                     (balrec['fonte_recurso'] > 0)
                                      & (
                                          (balrec['caracteristica_peculiar_receita'] != 101)
                                          & (balrec['caracteristica_peculiar_receita'] == 103)

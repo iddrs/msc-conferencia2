@@ -7,7 +7,7 @@ import pandas as pd
 
 
 class App:
-    def __init__(self, logger, reporter, mapeamento_cc, msc_atual, msc_anterior, balver_atual, balver_anterior, balrec, baldesp, decreto, restos_pagar, testes):
+    def __init__(self, logger, reporter, mapeamento_cc, msc_atual, msc_anterior, balver_atual, balver_anterior, balrec, baldesp, decreto, restos_pagar, testes, mes):
         self.logger = logger
         self.reporter = reporter
         self.mapeamento_cc = mapeamento_cc
@@ -20,6 +20,7 @@ class App:
         self.decreto = decreto
         self.restos_pagar = restos_pagar
         self.testes = testes
+        self.mes = mes
 
 
     def run(self):
@@ -39,15 +40,23 @@ class App:
         # cria uma lista com as contas contábeis
         anterior = balver_anterior[balver_anterior['escrituracao'] == 'S']
         atual = balver_atual[balver_atual['escrituracao'] == 'S']
-        lista_cc = pd.concat([anterior['conta_contabil'], atual['conta_contabil']])
+        # atual.to_excel('teste.xlsx')
+        # exit()
+        # lista_cc = pd.concat([anterior['conta_contabil'], atual['conta_contabil']])
+        lista_cc = atual['conta_contabil']
         lista_cc = lista_cc.unique()
 
         # monta o balancete mensal
         balancete = []
         for cc in lista_cc:
             # saldo inicial
-            saldo_inicial_devedor = sum(balver_anterior[balver_anterior['conta_contabil'] == cc]['saldo_atual_devedor'])
-            saldo_inicial_credor = sum(balver_anterior[balver_anterior['conta_contabil'] == cc]['saldo_atual_credor'])
+            if self.mes == '01':
+                saldo_inicial_devedor = sum(balver_atual[balver_atual['conta_contabil'] == cc]['saldo_anterior_devedor'])
+                saldo_inicial_credor = sum(balver_atual[balver_atual['conta_contabil'] == cc]['saldo_anterior_credor'])
+            else:
+                saldo_inicial_devedor = sum(balver_anterior[balver_anterior['conta_contabil'] == cc]['saldo_atual_devedor'])
+                saldo_inicial_credor = sum(balver_anterior[balver_anterior['conta_contabil'] == cc]['saldo_atual_credor'])
+
             if saldo_inicial_devedor > saldo_inicial_credor:
                 saldo_inicial = round(saldo_inicial_devedor - saldo_inicial_credor, 2)
                 natureza_inicial = 'D'
@@ -59,8 +68,13 @@ class App:
                 natureza_inicial = ' '
 
             # movimentação a débito/crédito
-            movimento_devedor_anterior = sum(balver_anterior[balver_anterior['conta_contabil'] == cc]['movimento_devedor'])
-            movimento_credor_anterior = sum(balver_anterior[balver_anterior['conta_contabil'] == cc]['movimento_credor'])
+            if self.mes == '01':
+                movimento_devedor_anterior = 0.0
+                movimento_credor_anterior = 0.0
+            else:
+                movimento_devedor_anterior = sum(balver_anterior[balver_anterior['conta_contabil'] == cc]['movimento_devedor'])
+                movimento_credor_anterior = sum(balver_anterior[balver_anterior['conta_contabil'] == cc]['movimento_credor'])
+
             movimento_devedor_atual = sum(balver_atual[balver_atual['conta_contabil'] == cc]['movimento_devedor'])
             movimento_credor_atual = sum(balver_atual[balver_atual['conta_contabil'] == cc]['movimento_credor'])
             movimento_devedor = round(movimento_devedor_atual - movimento_devedor_anterior, 2)
@@ -89,11 +103,13 @@ class App:
                 'saldo_final_natureza': natureza_final
             })
         df = pd.DataFrame(balancete)
+        # df.to_excel('teste.xlsx')
+        # exit()
         df = df.loc[
-            (df['saldo_inicial_valor'] > 0)
-            | (df['saldo_final_valor'] > 0)
-            | (df['movimento_devedor'] > 0)
-            | (df['movimento_credor'] > 0)
+            (df['saldo_inicial_valor'] != 0)
+            | (df['saldo_final_valor'] != 0)
+            | (df['movimento_devedor'] != 0)
+            | (df['movimento_credor'] != 0)
         ]
         df['conta_contabil'] = self.busca_mapeamento(df['conta_contabil'].copy())
         df = df.groupby(['conta_contabil', 'saldo_inicial_natureza', 'saldo_final_natureza'], as_index=False).sum()
@@ -102,6 +118,8 @@ class App:
        'saldo_final_valor_pad']
         df['saldo_inicial_chave_pad'] = df['saldo_inicial_valor_pad'].astype(str) + df.saldo_inicial_natureza_pad
         df['saldo_final_chave_pad'] = df['saldo_final_valor_pad'].astype(str) + df.saldo_final_natureza_pad
+        # df.to_excel('teste.xlsx')
+        # exit()
         return df
 
     def busca_mapeamento(self, list_cc):

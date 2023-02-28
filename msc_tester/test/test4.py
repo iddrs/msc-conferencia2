@@ -53,9 +53,9 @@ class Test:
         cc = cc.unique()
         mapeamento = self.app.busca_mapeamento(cc)
         df = pd.DataFrame({'conta_contabil_mapeada': mapeamento, 'conta_contabil_pad': cc})
-        for i, r in df.iterrows():
-            if self.app.balver['conta_contabil'].isin([r['conta_contabil_mapeada']]).any():
-                continue
-            else:
-                df = df.drop(i)
+        # for i, r in df.iterrows():
+        #     if self.app.balver['conta_contabil'].isin([r['conta_contabil_mapeada']]).any():
+        #         continue
+        #     else:
+        #         df = df.drop(i)
         return df
