@@ -20,8 +20,8 @@ if mes_anterior == '00':
     mes_anterior_msc = '13'
     mes_anterior_pad = '12'
 else:
-    mes_anterior_msc = '12'
-    mes_anterior_pad = '12'
+    mes_anterior_msc = mes_anterior
+    mes_anterior_pad = mes_anterior
 
 logger.basicConfig(format='%(asctime)s\t%(levelname)s\t%(message)s', level=logger.DEBUG, datefmt='%Y-%m-%d %H:%M:%S')
 file_report = r'report.xlsx'
