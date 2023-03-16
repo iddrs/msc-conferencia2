@@ -139,8 +139,8 @@ class Test:
         saldo_msc = saldo_msc_c - saldo_msc_d
 
         saldo_balrec = round(sum(balrec[
-                                     ((balrec['fonte_recurso'] >= 540) & (balrec['fonte_recurso'] <= 543))
-                                     & (balrec['caracteristica_peculiar_receita'] > 0)
+                                     (balrec['fonte_recurso'] == 500)
+                                     & (balrec['caracteristica_peculiar_receita'] == 105)
                                  ]['receita_orcada'])*-1, 2)
         diff = round(saldo_msc - saldo_balrec, 2)
         # print(saldo_msc, saldo_balrec)
