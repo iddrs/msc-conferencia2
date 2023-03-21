@@ -7,8 +7,8 @@ from msc_tester.test import test1, test2, test3, test4, test5, test6, test7, tes
 import logging as logger
 import os
 
-mes = input('Digite o MÊS desejado [MM]: ').zfill(2)
 ano = input('Digite o ANO desejado [AAAA]: ')
+mes = input('Digite o MÊS desejado [MM]: ').zfill(2)
 
 if mes == '01':
     ano_anterior = str(int(ano) - 1)
