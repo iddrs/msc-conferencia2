@@ -3,7 +3,7 @@ Ponto de entrada da aplicação.
 """
 import pandas as pd
 import msc_tester.app, msc_tester.reporter
-from msc_tester.test import test1, test2, test3, test4, test5, test6, test7, test8, test9
+from msc_tester.test import test1, test2, test3, test4, test5, test6, test7, test8, test9, test11
 import logging as logger
 import os
 
@@ -70,6 +70,7 @@ testes = [
     test7,
     test8,
     test9,
+    test11
 ]
 
 app = msc_tester.app.App(logger, reporter, mapeamento_cc, msc_atual, msc_anterior, balver_atual, balver_anterior, balrec, baldesp, decreto, restos_pagar, testes, mes)
