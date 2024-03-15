@@ -3,7 +3,7 @@ Ponto de entrada da aplicação.
 """
 import pandas as pd
 import msc_tester.app, msc_tester.reporter
-from msc_tester.test import test1, test2, test3, test4, test5, test10
+from msc_tester.test import test1, test2, test3, test4, test5, test10, test11
 import logging as logger
 import os
 
@@ -16,15 +16,15 @@ mes_anterior_pad = '12'
 
 logger.basicConfig(format='%(asctime)s\t%(levelname)s\t%(message)s', level=logger.DEBUG, datefmt='%Y-%m-%d %H:%M:%S')
 file_report = r'report.xlsx'
-file_mapeamento_cc = r'mapeamento_cc_2022.xlsx'
-file_msc_atual = os.path.join(r'C:\Users\Everton\Desktop\Prefeitura\MSC\parquet', f'{ano}-{mes}.parquet')
-file_msc_anterior = os.path.join(r'C:\Users\Everton\Desktop\Prefeitura\MSC\parquet', f'{ano_anterior}-{mes_anterior_msc}.parquet')
-file_balver_atual = os.path.join(r'C:\Users\Everton\Desktop\Prefeitura\PAD', f'{ano}-{mes_anterior_pad}', r'parquet\BVER_ENC.parquet')
-file_balver_anterior = os.path.join(r'C:\Users\Everton\Desktop\Prefeitura\PAD', f'{ano_anterior}-{mes_anterior_pad}', r'parquet\BAL_VER.parquet')
-file_balrec = os.path.join(r'C:\Users\Everton\Desktop\Prefeitura\PAD', f'{ano}-{mes_anterior_pad}', r'parquet\BAL_REC.parquet')
-file_baldesp = os.path.join(r'C:\Users\Everton\Desktop\Prefeitura\PAD', f'{ano}-{mes_anterior_pad}', r'parquet\BAL_DESP.parquet')
-file_decreto = os.path.join(r'C:\Users\Everton\Desktop\Prefeitura\PAD', f'{ano}-{mes_anterior_pad}', r'parquet\DECRETO.parquet')
-file_restos_pagar = os.path.join(r'C:\Users\Everton\Desktop\Prefeitura\PAD', f'{ano}-{mes_anterior_pad}', r'parquet\RESTOS_PAGAR.parquet')
+file_mapeamento_cc = r'mapeamento_cc.xlsx'
+file_msc_atual = os.path.join(r'C:\Users\Everton\OneDrive - independencia.rs.gov.br\Prefeitura\MSC\parquet', f'{ano}-{mes}.parquet')
+file_msc_anterior = os.path.join(r'C:\Users\Everton\OneDrive - independencia.rs.gov.br\Prefeitura\MSC\parquet', f'{ano_anterior}-{mes_anterior_msc}.parquet')
+file_balver_atual = os.path.join(r'C:\Users\Everton\OneDrive - independencia.rs.gov.br\Prefeitura\PAD', f'{ano}-{mes_anterior_pad}', r'parquet\BVER_ENC.parquet')
+file_balver_anterior = os.path.join(r'C:\Users\Everton\OneDrive - independencia.rs.gov.br\Prefeitura\PAD', f'{ano_anterior}-{mes_anterior_pad}', r'parquet\BAL_VER.parquet')
+file_balrec = os.path.join(r'C:\Users\Everton\OneDrive - independencia.rs.gov.br\Prefeitura\PAD', f'{ano}-{mes_anterior_pad}', r'parquet\BAL_REC.parquet')
+file_baldesp = os.path.join(r'C:\Users\Everton\OneDrive - independencia.rs.gov.br\Prefeitura\PAD', f'{ano}-{mes_anterior_pad}', r'parquet\BAL_DESP.parquet')
+file_decreto = os.path.join(r'C:\Users\Everton\OneDrive - independencia.rs.gov.br\Prefeitura\PAD', f'{ano}-{mes_anterior_pad}', r'parquet\DECRETO.parquet')
+file_restos_pagar = os.path.join(r'C:\Users\Everton\OneDrive - independencia.rs.gov.br\Prefeitura\PAD', f'{ano}-{mes_anterior_pad}', r'parquet\RESTOS_PAGAR.parquet')
 
 logger.debug(f'Arquivo de resultados: {file_report}')
 logger.debug(f'Arquivo de mapeamento de conta contábil: {file_mapeamento_cc}')
@@ -54,7 +54,8 @@ testes = [
     test3,
     test4,
     test5,
-    test10
+    test10,
+    test11
 ]
 
 app = msc_tester.app.App(logger, reporter, mapeamento_cc, msc_atual, msc_anterior, balver_atual, balver_anterior, balrec, baldesp, decreto, restos_pagar, testes, mes)
